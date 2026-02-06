@@ -1,0 +1,91 @@
+import express from 'express';
+import mongoose from 'mongoose';
+import Thread from '../models/thread.mjs';
+import Message from '../models/message.mjs';
+import requireAuth from '../middleware/requireAuth.mjs';
+
+const router = express.Router();
+
+/**
+ * POST /threads
+ * Créer un thread pour un groupe OU un événement
+ */
+router.post('/', requireAuth, async (req, res) => {
+  try {
+    const { type, group, event } = req.body;
+
+    if (!type || !['group', 'event'].includes(type)) {
+      return res.status(400).json({ error: 'type invalide' });
+    }
+
+    if (group && !mongoose.isValidObjectId(group)) {
+      return res.status(400).json({ error: 'group invalide' });
+    }
+
+    if (event && !mongoose.isValidObjectId(event)) {
+      return res.status(400).json({ error: 'event invalide' });
+    }
+
+    const thread = await Thread.create({
+      type,
+      group: group ?? null,
+      event: event ?? null
+    });
+
+    return res.status(201).json(thread);
+  } catch (err) {
+    return res.status(400).json({ error: err.message });
+  }
+});
+
+/**
+ * GET /threads/:id/messages
+ * Récupérer les messages d’un thread
+ */
+router.get('/:id/messages', async (req, res) => {
+  try {
+    const { id } = req.params;
+    if (!mongoose.isValidObjectId(id)) {
+      return res.status(400).json({ error: 'ID invalide' });
+    }
+
+    const messages = await Message.find({ thread: id })
+      .populate('author', 'email')
+      .sort({ createdAt: 1 });
+
+    return res.json(messages);
+  } catch (err) {
+    return res.status(500).json({ error: 'Erreur serveur' });
+  }
+});
+
+/**
+ * POST /threads/:id/messages
+ * Poster un message
+ */
+router.post('/:id/messages', requireAuth, async (req, res) => {
+  try {
+    const { id } = req.params;
+    const { content } = req.body;
+
+    if (!content) {
+      return res.status(400).json({ error: 'content requis' });
+    }
+
+    if (!mongoose.isValidObjectId(id)) {
+      return res.status(400).json({ error: 'ID invalide' });
+    }
+
+    const message = await Message.create({
+      content,
+      author: req.user.id,
+      thread: id
+    });
+
+    return res.status(201).json(message);
+  } catch (err) {
+    return res.status(500).json({ error: 'Erreur serveur' });
+  }
+});
+
+export default router;

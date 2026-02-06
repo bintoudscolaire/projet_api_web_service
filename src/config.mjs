@@ -2,11 +2,11 @@ export default {
   development: {
     type: 'development',
     port: 3000,
-    mongodb: 'mongodb+srv://12345:12345@demo.v4muu5b.mongodb.net/ecole'
+    mongodb: 'mongodb://localhost:27017/api-tp1'   // URL locale
   },
   production: {
     type: 'production',
     port: 3000,
-    mongodb: 'mongodb+srv://12345:12345@demo.v4muu5b.mongodb.net/ecole'
+    mongodb: 'mongodb://localhost:27017/api-tp1'   
   }
 };

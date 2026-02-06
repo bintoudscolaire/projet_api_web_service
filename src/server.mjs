@@ -1,100 +1,69 @@
-// Dependencies
 import express from 'express';
 import mongoose from 'mongoose';
 import bodyParser from 'body-parser';
 import compression from 'compression';
 import cors from 'cors';
 import helmet from 'helmet';
+import dotenv from 'dotenv';
 
-// Core
-import config from './config.mjs';
-import routes from './controllers/routes.mjs';
+// Routes
+import authRoutes from './middleware/auth.mjs';
+import userRoutes from './controllers/routes.mjs';
+import groupRoutes from './routes/groups.mjs';
+import eventRoutes from './routes/events.mjs';
+import threadRoutes from './routes/threads.mjs';
+import albumRoutes from './routes/albums.mjs';
+import pollRoutes from './routes/polls.mjs';
+import ticketRoutes from './routes/tickets.mjs';
 
-const Server = class Server {
+dotenv.config();
+
+class Server {
   constructor() {
     this.app = express();
-    this.config = config[process.argv[2]] || config.development;
+    this.config = {
+      port: process.env.PORT || 3000,
+      mongodb: process.env.MONGODB_URI
+    };
   }
 
   async dbConnect() {
-    try {
-      const host = this.config.mongodb;
-
-      this.connect = await mongoose.createConnection(host, {
-        useNewUrlParser: true,
-        useUnifiedTopology: true
-      });
-
-      const close = () => {
-        this.connect.close((error) => {
-          if (error) {
-            console.error('[ERROR] api dbConnect() close() -> mongodb error', error);
-          } else {
-            console.log('[CLOSE] api dbConnect() -> mongodb closed');
-          }
-        });
-      };
-
-      this.connect.on('error', (err) => {
-        setTimeout(() => {
-          console.log('[ERROR] api dbConnect() -> mongodb error');
-          this.connect = this.dbConnect(host);
-        }, 5000);
-
-        console.error(`[ERROR] api dbConnect() -> ${err}`);
-      });
-
-      this.connect.on('disconnected', () => {
-        setTimeout(() => {
-          console.log('[DISCONNECTED] api dbConnect() -> mongodb disconnected');
-          this.connect = this.dbConnect(host);
-        }, 5000);
-      });
-
-      process.on('SIGINT', () => {
-        close();
-        console.log('[API END PROCESS] api dbConnect() -> close mongodb connection');
-        process.exit(0);
-      });
-    } catch (err) {
-      console.error(`[ERROR] api dbConnect() -> ${err}`);
-    }
+    await mongoose.connect(this.config.mongodb);
+    console.log('[CONNECTED] MongoDB connecté');
   }
 
   middleware() {
-    this.app.use(compression());
+    this.app.use(helmet());
     this.app.use(cors());
-    this.app.use(bodyParser.urlencoded({ extended: true }));
+    this.app.use(compression());
     this.app.use(bodyParser.json());
+    this.app.use(bodyParser.urlencoded({ extended: true }));
   }
 
   routes() {
-    new routes.Users(this.app, this.connect);
+    this.app.use('/auth', authRoutes);
+    this.app.use('/users', userRoutes);
+    this.app.use('/groups', groupRoutes);
+    this.app.use('/events', eventRoutes);
+    this.app.use('/threads', threadRoutes);
+    this.app.use('/albums', albumRoutes);
+    this.app.use('/polls', pollRoutes);
+    this.app.use('/tickets', ticketRoutes);
 
     this.app.use((req, res) => {
-      res.status(404).json({
-        code: 404,
-        message: 'Not Found'
-      });
+      res.status(404).json({ code: 404, message: 'Not Found' });
     });
   }
 
-  security() {
-    this.app.use(helmet());
-    this.app.disable('x-powered-by');
-  }
-
   async run() {
-    try {
-      await this.dbConnect();
-      this.security();
-      this.middleware();
-      this.routes();
-      this.app.listen(this.config.port);
-    } catch (err) {
-      console.error(`[ERROR] Server -> ${err}`);
-    }
+    await this.dbConnect();
+    this.middleware();
+    this.routes();
+
+    this.app.listen(this.config.port, () => {
+      console.log(`[SERVER] Listening on port ${this.config.port}`);
+    });
   }
-};
+}
 
 export default Server;
