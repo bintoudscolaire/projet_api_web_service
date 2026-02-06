@@ -9,12 +9,12 @@ import dotenv from 'dotenv';
 // Routes
 import authRoutes from './middleware/auth.mjs';
 import userRoutes from './controllers/routes.mjs';
-import groupRoutes from './routes/groups.mjs';
-import eventRoutes from './routes/events.mjs';
-import threadRoutes from './routes/threads.mjs';
-import albumRoutes from './routes/albums.mjs';
-import pollRoutes from './routes/polls.mjs';
-import ticketRoutes from './routes/tickets.mjs';
+import groupRoutes from './route/groups.mjs';
+import eventRoutes from './route/events.mjs';
+import threadRoutes from './route/threads.mjs';
+import albumRoutes from './route/albums.mjs';
+import pollRoutes from './route/polls.mjs';
+import ticketRoutes from './route/tickets.mjs';
 
 dotenv.config();
 
