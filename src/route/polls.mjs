@@ -1,34 +1,62 @@
 import express from 'express';
 import mongoose from 'mongoose';
 import Poll from '../models/poll.mjs';
+import Event from '../models/event.mjs';
 import requireAuth from '../middleware/requireAuth.mjs';
 
 const router = express.Router();
 
+/**
+ * POST /polls/events/:eventId
+ * Création d’un sondage pour un événement
+ */
 router.post('/events/:eventId', requireAuth, async (req, res) => {
-  const poll = await Poll.create({
-    question: req.body.question,
-    options: req.body.options.map(o => ({ text: o, votes: [] })),
-    event: req.params.eventId,
-    createdBy: req.user.id
-  });
+  try {
+    const { eventId } = req.params;
+    const { title, questions } = req.body;
 
-  res.status(201).json(poll);
-});
+    if (!mongoose.isValidObjectId(eventId)) {
+      return res.status(400).json({ error: 'ID événement invalide' });
+    }
 
-router.post('/:pollId/vote', requireAuth, async (req, res) => {
-  const poll = await Poll.findById(req.params.pollId);
-  if (!poll) return res.status(404).json({ error: 'Poll introuvable' });
+    if (!title || !questions || !Array.isArray(questions) || questions.length === 0) {
+      return res.status(400).json({
+        error: 'title et questions sont requis'
+      });
+    }
 
-  poll.options[req.body.optionIndex].votes.push(req.user.id);
-  await poll.save();
+    const event = await Event.findById(eventId);
+    if (!event) {
+      return res.status(404).json({ error: 'Événement introuvable' });
+    }
 
-  res.json(poll);
-});
+    // 👉 on prend la première question pour satisfaire le schema
+    const mainQuestion = questions[0]?.question;
+    if (!mainQuestion) {
+      return res.status(400).json({
+        error: 'Chaque question doit contenir un champ "question"'
+      });
+    }
 
-router.get('/events/:eventId', async (req, res) => {
-  const polls = await Poll.find({ event: req.params.eventId });
-  res.json(polls);
+    const poll = await Poll.create({
+      title,
+      question: mainQuestion, // 👈 OBLIGATOIRE selon ton model
+      questions: questions.map(q => ({
+        question: q.question,
+        options: q.answers.map(a => ({
+          text: a,
+          votes: []
+        }))
+      })),
+      event: eventId,
+      createdBy: req.user.id // 👈 OBLIGATOIRE selon ton model
+    });
+
+    res.status(201).json(poll);
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ error: 'Erreur serveur' });
+  }
 });
 
 export default router;
