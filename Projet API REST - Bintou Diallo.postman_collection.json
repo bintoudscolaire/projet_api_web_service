@@ -1,0 +1,398 @@
+{
+  "info": {
+    "_postman_id": "8c0b8201-f6d8-43b9-8fad-a7df09b1100c",
+    "name": "Projet API REST - Bintou Diallo",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "_exporter_id": "49072499",
+    "_collection_link": "https://go.postman.co/collection/49072499-8c0b8201-f6d8-43b9-8fad-a7df09b1100c?source=collection_link"
+  },
+  "item": [
+    {
+      "name": "Création d'un utilisateur",
+      "request": {
+        "auth": {
+          "type": "noauth"
+        },
+        "method": "POST",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "{\r\n    \"email\" : \"user@email.com\",\r\n    \"password\" : \"motdepasse\"\r\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "http://localhost:3000/auth/register",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "3000",
+          "path": [
+            "auth",
+            "register"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Connexion d'un utilisateur",
+      "request": {
+        "auth": {
+          "type": "noauth"
+        },
+        "method": "POST",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2OTg1YzQ1ZGNlNGI0MmRhYzdlYWY1NjQiLCJpYXQiOjE3NzAzNzYxNTUsImV4cCI6MTc3MDM4MzM1NX0.DV6mdg21YkVR-Uzy9C_2vBFml7ZfAkeN8UR4sbvw0VU",
+            "type": "text"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\r\n    \"email\" : \"user@email.com\",\r\n    \"password\" : \"motdepasse\"\r\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "http://localhost:3000/auth/login",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "3000",
+          "path": [
+            "auth",
+            "login"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Lister les utilisateurs",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "http://localhost:3000/users/",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "3000",
+          "path": [
+            "users",
+            ""
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Création d'un groupe",
+      "request": {
+        "auth": {
+          "type": "noauth"
+        },
+        "method": "POST",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2OTg1YzQ1ZGNlNGI0MmRhYzdlYWY1NjQiLCJpYXQiOjE3NzAzNzYxNTUsImV4cCI6MTc3MDM4MzM1NX0.DV6mdg21YkVR-Uzy9C_2vBFml7ZfAkeN8UR4sbvw0VU",
+            "type": "text"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\r\n  \"name\": \"Groupe Soirée\",\r\n  \"description\": \"Organisation soirée\"\r\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "http://localhost:3000/groups/",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "3000",
+          "path": [
+            "groups",
+            ""
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Lister les groupes",
+      "request": {
+        "auth": {
+          "type": "noauth"
+        },
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "http://localhost:3000/groups/",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "3000",
+          "path": [
+            "groups",
+            ""
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Création d'un évènement",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2OTg1YzQ1ZGNlNGI0MmRhYzdlYWY1NjQiLCJpYXQiOjE3NzAzNzQ5NTcsImV4cCI6MTc3MDM4MjE1N30.5n9N7Wy0MSROYIQrwxTyzvrvJGzOUeX9E69RqyUTf6o",
+            "type": "text"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\r\n  \"name\": \"Soirée test\",\r\n  \"description\": \"Event de test\",\r\n  \"dateStart\": \"2026-02-10T18:00:00.000Z\",\r\n  \"dateEnd\": \"2026-02-10T23:00:00.000Z\",\r\n  \"location\": \"Paris\",\r\n  \"isPublic\": true\r\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "http://localhost:3000/events",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "3000",
+          "path": [
+            "events"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Lister les évènements",
+      "request": {
+        "auth": {
+          "type": "noauth"
+        },
+        "method": "GET",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2OTg1YzQ1ZGNlNGI0MmRhYzdlYWY1NjQiLCJpYXQiOjE3NzAzNzQ5NTcsImV4cCI6MTc3MDM4MjE1N30.5n9N7Wy0MSROYIQrwxTyzvrvJGzOUeX9E69RqyUTf6o",
+            "type": "text"
+          }
+        ],
+        "url": {
+          "raw": "http://localhost:3000/events/",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "3000",
+          "path": [
+            "events",
+            ""
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Création album photo pour un évènement",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2OTg1YzQ1ZGNlNGI0MmRhYzdlYWY1NjQiLCJpYXQiOjE3NzAzNzYxNTUsImV4cCI6MTc3MDM4MzM1NX0.DV6mdg21YkVR-Uzy9C_2vBFml7ZfAkeN8UR4sbvw0VU",
+            "type": "text"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\r\n  \"title\": \"Album Soirée de fin d’année\",\r\n  \"description\": \"Photos de la soirée\"\r\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "http://localhost:3000/albums/events/6985cc25ce4b42dac7eaf56e",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "3000",
+          "path": [
+            "albums",
+            "events",
+            "6985cc25ce4b42dac7eaf56e"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Lister les albums photo",
+      "request": {
+        "auth": {
+          "type": "noauth"
+        },
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "http://localhost:3000/albums/events/6985cc25ce4b42dac7eaf56e",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "3000",
+          "path": [
+            "albums",
+            "events",
+            "6985cc25ce4b42dac7eaf56e"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Création d'un sondage pour un évènement",
+      "request": {
+        "auth": {
+          "type": "noauth"
+        },
+        "method": "POST",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2OTg1YzQ1ZGNlNGI0MmRhYzdlYWY1NjQiLCJpYXQiOjE3NzAzNzYxNTUsImV4cCI6MTc3MDM4MzM1NX0.DV6mdg21YkVR-Uzy9C_2vBFml7ZfAkeN8UR4sbvw0VU",
+            "type": "text"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\r\n  \"title\": \"Organisation\",\r\n  \"questions\": [\r\n    {\r\n      \"question\": \"Quelle heure ?\",\r\n      \"answers\": [\"18h\", \"19h\", \"20h\"]\r\n    }\r\n  ]\r\n}\r\n",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "http://localhost:3000/polls/events/6985cc25ce4b42dac7eaf56e",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "3000",
+          "path": [
+            "polls",
+            "events",
+            "6985cc25ce4b42dac7eaf56e"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Création d'un type de billet",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2OTg1YzQ1ZGNlNGI0MmRhYzdlYWY1NjQiLCJpYXQiOjE3NzAzNzYxNTUsImV4cCI6MTc3MDM4MzM1NX0.DV6mdg21YkVR-Uzy9C_2vBFml7ZfAkeN8UR4sbvw0VU",
+            "type": "text"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\r\n  \"name\": \"Billet Standard\",\r\n  \"price\": 15,\r\n  \"quantity\": 100\r\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "http://localhost:3000/tickets/events/6985cc25ce4b42dac7eaf56e/types",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "3000",
+          "path": [
+            "tickets",
+            "events",
+            "6985cc25ce4b42dac7eaf56e",
+            "types"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Achat d'un billet",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2OTg1YzQ1ZGNlNGI0MmRhYzdlYWY1NjQiLCJpYXQiOjE3NzAzNzYxNTUsImV4cCI6MTc3MDM4MzM1NX0.DV6mdg21YkVR-Uzy9C_2vBFml7ZfAkeN8UR4sbvw0VU",
+            "type": "text"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\r\n  \"firstname\": \"Bintou\",\r\n  \"lastname\": \"DIALLO\",\r\n  \"address\": \"12 rue des licornes, 99087 Rainbow-Town\"\r\n}\r\n",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "http://localhost:3000/tickets/types/6985d7c311f9c97ef73e74e5/buy",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "3000",
+          "path": [
+            "tickets",
+            "types",
+            "6985d7c311f9c97ef73e74e5",
+            "buy"
+          ]
+        }
+      },
+      "response": []
+    }
+  ]
+}
